@@ -3,7 +3,12 @@ package com.flow.workflow.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flow.connector.registry.InMemoryTriggerRegistry;
+import com.flow.connector.trigger.SchedulerTriggerHandler;
+import com.flow.connector.trigger.TriggerValidationService;
+import com.flow.connector.trigger.WebhookTriggerHandler;
 import com.flow.workflow.domain.model.WorkflowValidationResult;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,14 +18,25 @@ class WorkflowValidationServiceTest {
 
     @BeforeEach
     void setUp() {
-        workflowValidationService = new WorkflowValidationService(new ObjectMapper());
+        TriggerValidationService triggerValidationService = new TriggerValidationService(new InMemoryTriggerRegistry(List.of(
+                new SchedulerTriggerHandler(),
+                new WebhookTriggerHandler()
+        )));
+        workflowValidationService = new WorkflowValidationService(new ObjectMapper(), triggerValidationService);
     }
 
     @Test
     void shouldValidateWorkflowDefinitionWithConnectedDag() {
         String definitionJson = """
                 {
-                  "trigger": {"type": "webhook"},
+                  "trigger": {
+                    "type": "webhook",
+                    "configuration": {
+                      "webhookIdentifier": "wh_1234567890abcdef1234567890abcdef",
+                      "secretToken": "super-secret-token-1234",
+                      "active": true
+                    }
+                  },
                   "nodes": [
                     {"id": "start", "type": "log"},
                     {"id": "approve", "type": "conditional"},
@@ -60,7 +76,13 @@ class WorkflowValidationServiceTest {
     void shouldRejectWorkflowDefinitionWithEmptyGraph() {
         String definitionJson = """
                 {
-                  "trigger": {"type": "scheduler"},
+                  "trigger": {
+                    "type": "scheduler",
+                    "configuration": {
+                      "cronExpression": "0 */5 * * * *",
+                      "timezone": "UTC"
+                    }
+                  },
                   "nodes": [],
                   "edges": []
                 }
@@ -76,7 +98,14 @@ class WorkflowValidationServiceTest {
     void shouldRejectWorkflowDefinitionWithMissingNodeFieldsAndUnknownEdgeTargets() {
         String definitionJson = """
                 {
-                  "trigger": {"type": "webhook"},
+                  "trigger": {
+                    "type": "webhook",
+                    "configuration": {
+                      "webhookIdentifier": "wh_1234567890abcdef1234567890abcdef",
+                      "secretToken": "super-secret-token-1234",
+                      "active": true
+                    }
+                  },
                   "nodes": [
                     {"id": "start"},
                     {"type": "http"}
@@ -99,7 +128,14 @@ class WorkflowValidationServiceTest {
     void shouldRejectWorkflowDefinitionWithDisconnectedNode() {
         String definitionJson = """
                 {
-                  "trigger": {"type": "webhook"},
+                  "trigger": {
+                    "type": "webhook",
+                    "configuration": {
+                      "webhookIdentifier": "wh_1234567890abcdef1234567890abcdef",
+                      "secretToken": "super-secret-token-1234",
+                      "active": true
+                    }
+                  },
                   "nodes": [
                     {"id": "start", "type": "log"},
                     {"id": "branch", "type": "conditional"},
@@ -121,7 +157,14 @@ class WorkflowValidationServiceTest {
     void shouldRejectWorkflowDefinitionWithCircularReferences() {
         String definitionJson = """
                 {
-                  "trigger": {"type": "webhook"},
+                  "trigger": {
+                    "type": "webhook",
+                    "configuration": {
+                      "webhookIdentifier": "wh_1234567890abcdef1234567890abcdef",
+                      "secretToken": "super-secret-token-1234",
+                      "active": true
+                    }
+                  },
                   "nodes": [
                     {"id": "start", "type": "log"},
                     {"id": "branch", "type": "conditional"},
@@ -148,6 +191,27 @@ class WorkflowValidationServiceTest {
 
         assertThat(result.valid()).isFalse();
         assertThat(result.errors()).contains("Workflow definition must be valid JSON");
+    }
+
+    @Test
+    void shouldRejectWorkflowDefinitionWithUnknownTriggerType() {
+        String definitionJson = """
+                {
+                  "trigger": {
+                    "type": "custom",
+                    "configuration": {"name": "any"}
+                  },
+                  "nodes": [
+                    {"id": "start", "type": "log"}
+                  ],
+                  "edges": []
+                }
+                """;
+
+        WorkflowValidationResult result = workflowValidationService.validateDefinition(definitionJson);
+
+        assertThat(result.valid()).isFalse();
+        assertThat(result.errors()).contains("Workflow trigger type is invalid: custom");
     }
 }
 

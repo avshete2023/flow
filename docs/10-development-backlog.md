@@ -552,6 +552,10 @@ Complexity: S
 *   Validation result contract
     
 *   Service tests
+
+### Note
+
+TRG-007 is now integrated into workflow validation flow via `workflow-module` `WorkflowValidationService`, delegating trigger checks to the connector trigger registry-backed validation service.
     
 
 EPIC-5 Connector Framework

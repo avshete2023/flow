@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flow.connector.trigger.TriggerValidationService;
 import com.flow.workflow.domain.model.WorkflowStatus;
 import com.flow.workflow.dto.CreateWorkflowRequest;
 import com.flow.workflow.dto.WorkflowResponse;
@@ -45,6 +46,9 @@ class WorkflowControllerIntegrationTest {
 
     @MockBean
     private WorkflowActivationService workflowActivationService;
+
+    @MockBean
+    private TriggerValidationService triggerValidationService;
 
     @Test
     void shouldReturnUnauthorizedWithoutAuthentication() throws Exception {

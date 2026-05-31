@@ -1,5 +1,7 @@
 package com.flow.connector.trigger;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.flow.connector.registry.InMemoryTriggerRegistry;
 import com.flow.connector.registry.TriggerRegistry;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,20 +36,25 @@ public class TriggerValidationService {
             return TriggerValidationModel.failure(errors);
         }
 
-        if (!triggerRegistry.supports(triggerType)) {
-            errors.add("Trigger type is not supported: " + triggerType);
-            return TriggerValidationModel.failure(errors);
-        }
-
-        TriggerValidationModel triggerValidation = triggerRegistry
-                .get(triggerType)
-                .validateConfiguration(triggerDefinition.configuration());
+        TriggerValidationModel triggerValidation = validate(triggerType, triggerDefinition.configuration());
 
         if (!triggerValidation.valid()) {
             errors.addAll(triggerValidation.errors());
         }
 
         return errors.isEmpty() ? TriggerValidationModel.success() : TriggerValidationModel.failure(errors);
+    }
+
+    public TriggerValidationModel validate(TriggerType triggerType, JsonNode configuration) {
+        if (triggerType == null) {
+            return TriggerValidationModel.failure(List.of("Trigger type is required"));
+        }
+
+        try {
+            return triggerRegistry.get(triggerType).validateConfiguration(configuration);
+        } catch (InMemoryTriggerRegistry.UnknownTriggerTypeException exception) {
+            return TriggerValidationModel.failure(List.of(exception.getMessage()));
+        }
     }
 }
 

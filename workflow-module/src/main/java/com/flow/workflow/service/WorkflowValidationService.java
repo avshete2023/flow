@@ -3,6 +3,10 @@ package com.flow.workflow.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.flow.connector.trigger.TriggerType;
+import com.flow.connector.trigger.TriggerValidationModel;
+import com.flow.connector.trigger.TriggerValidationService;
 import com.flow.workflow.domain.model.WorkflowValidationResult;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -13,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 import java.util.Set;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +28,11 @@ import org.springframework.stereotype.Service;
 public class WorkflowValidationService {
 
     private final ObjectMapper objectMapper;
+    private final TriggerValidationService triggerValidationService;
 
-    public WorkflowValidationService(ObjectMapper objectMapper) {
+    public WorkflowValidationService(ObjectMapper objectMapper, TriggerValidationService triggerValidationService) {
         this.objectMapper = objectMapper;
+        this.triggerValidationService = triggerValidationService;
     }
 
     public WorkflowValidationResult validateDefinition(String definitionJson) {
@@ -79,7 +86,39 @@ public class WorkflowValidationService {
     private void validateTrigger(JsonNode trigger, List<String> errors) {
         if (trigger == null || trigger.isNull() || !trigger.isObject() || trigger.isEmpty()) {
             errors.add("Workflow trigger is required");
+            return;
         }
+
+        String typeValue = textValue(trigger.get("type"));
+        if (typeValue == null) {
+            errors.add("Workflow trigger type is required");
+            return;
+        }
+
+        TriggerType triggerType;
+        try {
+            triggerType = TriggerType.valueOf(typeValue.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException exception) {
+            errors.add("Workflow trigger type is invalid: " + typeValue);
+            return;
+        }
+
+        JsonNode configuration = resolveTriggerConfiguration(trigger);
+        TriggerValidationModel triggerValidation = triggerValidationService.validate(triggerType, configuration);
+        if (!triggerValidation.valid()) {
+            errors.addAll(triggerValidation.errors());
+        }
+    }
+
+    private JsonNode resolveTriggerConfiguration(JsonNode trigger) {
+        JsonNode explicitConfiguration = trigger.get("configuration");
+        if (explicitConfiguration != null) {
+            return explicitConfiguration;
+        }
+
+        ObjectNode inlineConfiguration = ((ObjectNode) trigger).deepCopy();
+        inlineConfiguration.remove("type");
+        return inlineConfiguration;
     }
 
     private void validateGraphContainers(JsonNode nodes, JsonNode edges, List<String> errors) {

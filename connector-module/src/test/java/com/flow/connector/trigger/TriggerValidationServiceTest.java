@@ -82,7 +82,7 @@ class TriggerValidationServiceTest {
         TriggerValidationModel result = triggerValidationService.validate(triggerDefinition);
 
         assertThat(result.valid()).isFalse();
-        assertThat(result.errors()).contains("Trigger type is not supported: EVENT");
+        assertThat(result.errors()).contains("Unknown trigger type: EVENT");
     }
 
     @Test
