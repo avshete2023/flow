@@ -269,6 +269,8 @@ Story WF-001
 
 Workflow Entity
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
