@@ -701,6 +701,8 @@ Story EXEC-001
 
 Execution Entity
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -718,6 +720,8 @@ Story EXEC-004
 --------------
 
 Execution State Machine
+
+Status: Implemented
 
 Complexity: XL
 
@@ -737,6 +741,8 @@ Story EXEC-006
 
 RabbitMQ Configuration
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -755,6 +761,8 @@ Story EXEC-007
 
 Execution Publisher
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -770,6 +778,8 @@ Story EXEC-008
 --------------
 
 Execution Consumer
+
+Status: Implemented
 
 Complexity: M
 
@@ -788,6 +798,8 @@ Story EXEC-009
 --------------
 
 Execution Orchestrator
+
+Status: Implemented
 
 Complexity: XXL
 
