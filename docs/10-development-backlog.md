@@ -210,6 +210,8 @@ Story USER-001
 
 Profile DTOs
 
+Status: Implemented
+
 Complexity: XS
 
 ### Tasks
@@ -225,6 +227,8 @@ Story USER-002
 --------------
 
 Profile Service
+
+Status: Implemented
 
 Complexity: M
 
@@ -243,6 +247,8 @@ Story USER-003
 --------------
 
 Profile API
+
+Status: Implemented
 
 Complexity: S
 
