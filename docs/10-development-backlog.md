@@ -566,6 +566,8 @@ Story CON-001
 
 Connector SPI
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -584,6 +586,8 @@ Story CON-002
 
 Connector Registry
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -600,6 +604,8 @@ Story CON-003
 
 HTTP Connector Config
 
+Status: Implemented
+
 Complexity: S
 
 ### Tasks
@@ -615,6 +621,8 @@ Story CON-004
 -------------
 
 HTTP Connector
+
+Status: Implemented
 
 Complexity: L
 
@@ -636,6 +644,8 @@ Story CON-005
 
 Delay Connector
 
+Status: Implemented
+
 Complexity: S
 
 ### Tasks
@@ -652,6 +662,8 @@ Story CON-006
 
 Conditional Connector
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -667,6 +679,8 @@ Story CON-007
 -------------
 
 Log Connector
+
+Status: Implemented
 
 Complexity: XS
 
