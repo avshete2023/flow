@@ -18,5 +18,9 @@ public interface WorkflowExecutionRepository extends JpaRepository<WorkflowExecu
     List<WorkflowExecution> findAllByStatus(ExecutionStatus status);
 
     List<WorkflowExecution> findAllByStatusAndStartedAtBefore(ExecutionStatus status, LocalDateTime threshold);
+
+    long countByStatus(ExecutionStatus status);
+
+    long countByRetryCountGreaterThan(int retryCount);
 }
 
