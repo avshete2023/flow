@@ -23,9 +23,10 @@ class JwtTokenValidatorTest {
 
     @Test
     void shouldValidateAccessTokenAndReturnPrincipal() {
+        Instant now = Instant.now();
         SecretKey secretKey = Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
         JwtProperties properties = jwtProperties();
-        JwtTokenGenerator generator = new JwtTokenGenerator(secretKey, Clock.fixed(Instant.parse("2026-05-31T10:15:30Z"), ZoneOffset.UTC), properties);
+        JwtTokenGenerator generator = new JwtTokenGenerator(secretKey, Clock.fixed(now, ZoneOffset.UTC), properties);
         JwtTokenValidator validator = new JwtTokenValidator(secretKey, properties);
 
         String token = generator.generateAccessToken(new JwtPrincipal(USER_ID, "john@example.com", UserRole.USER));
@@ -38,10 +39,11 @@ class JwtTokenValidatorTest {
 
     @Test
     void shouldRejectTokenSignedWithDifferentKey() {
+        Instant now = Instant.now();
         SecretKey signingKey = Keys.hmacShaKeyFor("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa".getBytes(StandardCharsets.UTF_8));
         SecretKey validationKey = Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
         JwtProperties properties = jwtProperties();
-        JwtTokenGenerator generator = new JwtTokenGenerator(signingKey, Clock.fixed(Instant.parse("2026-05-31T10:15:30Z"), ZoneOffset.UTC), properties);
+        JwtTokenGenerator generator = new JwtTokenGenerator(signingKey, Clock.fixed(now, ZoneOffset.UTC), properties);
         JwtTokenValidator validator = new JwtTokenValidator(validationKey, properties);
 
         String token = generator.generateAccessToken(new JwtPrincipal(USER_ID, "john@example.com", UserRole.USER));

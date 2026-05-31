@@ -19,14 +19,14 @@ import org.junit.jupiter.api.Test;
 class JwtTokenGeneratorTest {
 
     private static final String JWT_SECRET = "12345678901234567890123456789012";
-    private static final Instant FIXED_INSTANT = Instant.parse("2026-05-31T10:15:30Z");
     private static final UUID USER_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
     @Test
     void shouldGenerateSignedAccessTokenWithExpectedClaims() {
+        Instant fixedInstant = Instant.now();
         SecretKey secretKey = Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
         JwtProperties properties = jwtProperties();
-        JwtTokenGenerator generator = new JwtTokenGenerator(secretKey, Clock.fixed(FIXED_INSTANT, ZoneOffset.UTC), properties);
+        JwtTokenGenerator generator = new JwtTokenGenerator(secretKey, Clock.fixed(fixedInstant, ZoneOffset.UTC), properties);
         JwtPrincipal principal = new JwtPrincipal(USER_ID, "john@example.com", UserRole.USER);
 
         String token = generator.generateAccessToken(principal);
@@ -41,8 +41,9 @@ class JwtTokenGeneratorTest {
         assertThat(claims.get("email", String.class)).isEqualTo("john@example.com");
         assertThat(claims.get("role", String.class)).isEqualTo(UserRole.USER.name());
         assertThat(claims.getIssuer()).isEqualTo("flow-api");
-        assertThat(claims.getIssuedAt()).isEqualTo(java.util.Date.from(FIXED_INSTANT));
-        assertThat(claims.getExpiration()).isEqualTo(java.util.Date.from(FIXED_INSTANT.plus(Duration.ofMinutes(60))));
+        assertThat(claims.getIssuedAt().toInstant().getEpochSecond()).isEqualTo(fixedInstant.getEpochSecond());
+        assertThat(claims.getExpiration().toInstant().getEpochSecond())
+                .isEqualTo(fixedInstant.plus(Duration.ofMinutes(60)).getEpochSecond());
     }
 
     private static JwtProperties jwtProperties() {
