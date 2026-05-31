@@ -72,6 +72,8 @@ Documentation
 Quality
 -------
 
+*   `mvn clean install` (or `./mvnw clean install`) executed successfully
+    
 *   Build passes
     
 *   No compiler warnings

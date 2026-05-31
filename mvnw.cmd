@@ -174,16 +174,44 @@ if (!$actualDistributionDir) {
 }
 
 Write-Verbose "Found extracted Maven distribution directory: $actualDistributionDir"
-Rename-Item -Path "$TMP_DOWNLOAD_DIR/$actualDistributionDir" -NewName $MAVEN_HOME_NAME | Out-Null
-try {
-  Move-Item -Path "$TMP_DOWNLOAD_DIR/$MAVEN_HOME_NAME" -Destination $MAVEN_HOME_PARENT | Out-Null
-} catch {
-  if (! (Test-Path -Path "$MAVEN_HOME" -PathType Container)) {
-    Write-Error "fail to move MAVEN_HOME"
+$sourceMavenDir = "$TMP_DOWNLOAD_DIR/$actualDistributionDir"
+$moveSucceeded = $false
+
+# -----------------------------------------------------------------------------
+# Maintainer note:
+# Keep this retry + copy fallback in place. On some Windows machines, antivirus
+# scanners or file indexers temporarily lock freshly extracted files, causing
+# transient "Access to the path ... is denied" failures during Move/Rename.
+# The fallback is defensive and prevents flaky wrapper bootstrap failures.
+# -----------------------------------------------------------------------------
+# Some Windows environments transiently lock extracted files in temp dirs.
+# Retry direct move first, then fall back to copy+delete.
+for ($attempt = 1; $attempt -le 5 -and -not $moveSucceeded; $attempt++) {
+  try {
+    Move-Item -Path $sourceMavenDir -Destination $MAVEN_HOME -Force | Out-Null
+    $moveSucceeded = $true
+  } catch {
+    Start-Sleep -Milliseconds (200 * $attempt)
   }
-} finally {
-  try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
-  catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
 }
+
+if (-not $moveSucceeded) {
+  try {
+    Copy-Item -Path $sourceMavenDir -Destination $MAVEN_HOME -Recurse -Force | Out-Null
+    Remove-Item -Path $sourceMavenDir -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+    $moveSucceeded = $true
+  } catch {
+    if (! (Test-Path -Path "$MAVEN_HOME" -PathType Container)) {
+      Write-Error "fail to move MAVEN_HOME"
+    }
+  }
+}
+
+if (-not $moveSucceeded -and ! (Test-Path -Path "$MAVEN_HOME" -PathType Container)) {
+  Write-Error "fail to move MAVEN_HOME"
+}
+
+try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
+catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
 
 Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"

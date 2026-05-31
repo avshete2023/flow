@@ -127,6 +127,10 @@ For each story:
 7.  Implement tests
     
 8.  Validate Definition of Done
+
+9.  Run full verification build:
+    `mvn clean install`
+    (or `./mvnw clean install`) and ensure it passes.
     
 
 Forbidden Actions

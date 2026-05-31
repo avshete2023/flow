@@ -22,6 +22,8 @@ Feature: User Registration
 
 Create User Entity
 
+Status: Implemented
+
 Complexity: S
 
 Dependencies: None
@@ -47,6 +49,8 @@ DoD:
 
 Create User repository
 
+Status: Implemented
+
 Effort: 1h
 
 DoD:
@@ -59,6 +63,8 @@ DoD:
 #### TASK-AUTH-003
 
 Create Flyway migration
+
+Status: Implemented
 
 Effort: 1h
 
@@ -73,6 +79,8 @@ Feature: Registration
 ### Story AUTH-004
 
 Registration Service
+
+Status: Implemented
 
 Complexity: M
 
@@ -118,6 +126,8 @@ Feature: Authentication
 
 JWT Service
 
+Status: Implemented
+
 Complexity: M
 
 ### Technical Tasks
@@ -143,6 +153,8 @@ Story AUTH-008
 
 Login API
 
+Status: Implemented
+
 Complexity: M
 
 ### Technical Tasks
@@ -167,6 +179,8 @@ Story AUTH-009
 --------------
 
 Security Configuration
+
+Status: Implemented
 
 Complexity: L
 

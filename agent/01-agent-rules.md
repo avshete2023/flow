@@ -119,6 +119,11 @@ Completion Requirements
 
 Before marking a story complete:
 
+*   Run full verification build:
+    `mvn clean install`
+    (or `./mvnw clean install`)
+    and ensure it passes.
+    
 *   Build passes
     
 *   Tests pass
