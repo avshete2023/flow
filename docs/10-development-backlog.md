@@ -323,6 +323,8 @@ Story WF-004
 
 Workflow Validation Service
 
+Status: Implemented
+
 Complexity: L
 
 ### Tasks
@@ -352,6 +354,8 @@ Story WF-005
 
 Workflow CRUD Service
 
+Status: Implemented
+
 Complexity: L
 
 ### Tasks
@@ -374,6 +378,8 @@ Story WF-006
 
 Workflow Publish Service
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -392,6 +398,8 @@ Story WF-007
 
 Workflow Activation Service
 
+Status: Implemented
+
 Complexity: S
 
 ### Tasks
@@ -407,6 +415,8 @@ Story WF-008
 ------------
 
 Workflow API
+
+Status: Implemented
 
 Complexity: M
 
