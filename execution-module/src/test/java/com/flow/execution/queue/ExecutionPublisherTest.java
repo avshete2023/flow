@@ -33,7 +33,8 @@ class ExecutionPublisherTest {
         ArgumentCaptor<MessagePostProcessor> postProcessorCaptor = ArgumentCaptor.forClass(MessagePostProcessor.class);
 
         verify(rabbitTemplate).convertAndSend(
-                eq(ExecutionQueueNames.WORKFLOW_EXECUTION_QUEUE),
+                eq(ExecutionQueueNames.WORKFLOW_EXECUTION_EXCHANGE),
+                eq(ExecutionQueueNames.WORKFLOW_EXECUTION_ROUTING_KEY),
                 eq(published),
                 postProcessorCaptor.capture()
         );
@@ -52,7 +53,7 @@ class ExecutionPublisherTest {
         ExecutionRequestMessage published = executionPublisher.publishExecutionRequest(UUID.randomUUID(), " ");
 
         ArgumentCaptor<MessagePostProcessor> postProcessorCaptor = ArgumentCaptor.forClass(MessagePostProcessor.class);
-        verify(rabbitTemplate).convertAndSend(any(String.class), eq(published), postProcessorCaptor.capture());
+        verify(rabbitTemplate).convertAndSend(any(String.class), any(String.class), eq(published), postProcessorCaptor.capture());
 
         Message message = new Message(new byte[0], new MessageProperties());
         Message processed = postProcessorCaptor.getValue().postProcessMessage(message);

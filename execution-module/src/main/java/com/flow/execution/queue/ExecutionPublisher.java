@@ -19,12 +19,13 @@ public class ExecutionPublisher {
     }
 
     public ExecutionRequestMessage publishExecutionRequest(UUID workflowVersionId, String correlationId) {
-        ExecutionRequestMessage request = new ExecutionRequestMessage(
-                UUID.randomUUID(),
-                workflowVersionId,
-                correlationId,
-                LocalDateTime.now()
-        );
+        ExecutionRequestMessage request = new ExecutionRequestMessage(UUID.randomUUID(), workflowVersionId, correlationId, LocalDateTime.now());
+        publishExecutionRequest(request, ExecutionQueueNames.WORKFLOW_EXECUTION_ROUTING_KEY);
+        return request;
+    }
+
+    public void publishExecutionRequest(ExecutionRequestMessage request, String routingKey) {
+        String correlationId = request.correlationId();
 
         MessagePostProcessor correlationPostProcessor = message -> {
             if (correlationId != null && !correlationId.isBlank()) {
@@ -34,12 +35,11 @@ public class ExecutionPublisher {
         };
 
         rabbitTemplate.convertAndSend(
-                ExecutionQueueNames.WORKFLOW_EXECUTION_QUEUE,
+                ExecutionQueueNames.WORKFLOW_EXECUTION_EXCHANGE,
+                routingKey,
                 request,
                 correlationPostProcessor
         );
-
-        return request;
     }
 }
 

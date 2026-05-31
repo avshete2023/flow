@@ -842,6 +842,8 @@ Story EXEC-012
 
 Retry Service
 
+Status: Implemented
+
 Complexity: XL
 
 ### Tasks
@@ -860,6 +862,8 @@ Story EXEC-013
 
 Timeout Service
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -876,6 +880,8 @@ Story EXEC-014
 
 DLQ Service
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -891,6 +897,8 @@ Story EXEC-015
 --------------
 
 Manual Retry
+
+Status: Implemented
 
 Complexity: M
 
