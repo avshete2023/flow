@@ -441,6 +441,8 @@ Story TRG-001
 
 Trigger Model
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -459,6 +461,8 @@ Story TRG-002
 
 Trigger Registry
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -474,6 +478,8 @@ Story TRG-003
 -------------
 
 Scheduler Trigger
+
+Status: Implemented
 
 Complexity: M
 
@@ -493,6 +499,8 @@ Story TRG-005
 
 Webhook Trigger
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -511,6 +519,8 @@ Story TRG-006
 
 Webhook API
 
+Status: Implemented
+
 Complexity: S
 
 ### Tasks
@@ -522,6 +532,26 @@ Complexity: S
 *   Queue publish
     
 *   Integration tests
+    
+
+Story TRG-007
+-------------
+
+Trigger Validation Service
+
+Status: Implemented
+
+Complexity: S
+
+### Tasks
+
+*   Scheduler trigger validation
+    
+*   Webhook trigger validation
+    
+*   Validation result contract
+    
+*   Service tests
     
 
 EPIC-5 Connector Framework
