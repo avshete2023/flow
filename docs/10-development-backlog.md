@@ -1014,6 +1014,8 @@ Story AUD-001
 
 Audit Entity
 
+Status: Implemented
+
 Complexity: S
 
 ### Tasks
@@ -1030,6 +1032,8 @@ Story AUD-003
 
 Audit Service
 
+Status: Implemented
+
 Complexity: M
 
 ### Tasks
@@ -1041,10 +1045,48 @@ Complexity: M
 *   Tests
     
 
+Story AUD-004
+-------------
+
+Audit User Login Events
+
+Status: Implemented
+
+Complexity: S
+
+Story AUD-005
+-------------
+
+Audit Authentication Failures
+
+Status: Implemented
+
+Complexity: S
+
+Story AUD-006
+-------------
+
+Audit Workflow Lifecycle Events
+
+Status: Implemented
+
+Complexity: M
+
+Story AUD-007
+-------------
+
+Audit Workflow Execution Events
+
+Status: Implemented
+
+Complexity: M
+
 Story AUD-009
 -------------
 
 Audit API
+
+Status: Implemented
 
 Complexity: M
 

@@ -68,6 +68,11 @@
             <artifactId>connector-module</artifactId>
             <version>${project.version}</version>
         </dependency>
+            <dependency>
+              <groupId>com.flow</groupId>
+              <artifactId>audit-module</artifactId>
+              <version>${project.version}</version>
+            </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
