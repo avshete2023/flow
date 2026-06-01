@@ -8,6 +8,7 @@ import com.flow.workflow.domain.model.WorkflowStatus;
 import com.flow.workflow.domain.repository.WorkflowRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -87,6 +88,42 @@ class WorkflowRepositoryTest {
         assertThat(ownerWorkflows).hasSize(2);
         assertThat(activeWorkflows).hasSize(1);
         assertThat(activeWorkflows.get(0).getName()).isEqualTo("Active Workflow");
+    }
+
+    @Test
+    void shouldExcludeSoftDeletedWorkflowsInOwnerLookup() {
+        UUID ownerId = UUID.randomUUID();
+
+        workflowRepository.saveAndFlush(new Workflow(
+                UUID.randomUUID(),
+                ownerId,
+                "Active Workflow",
+                null,
+                WorkflowStatus.DRAFT,
+                null,
+                null,
+                null,
+                null,
+                null
+        ));
+
+        workflowRepository.saveAndFlush(new Workflow(
+                UUID.randomUUID(),
+                ownerId,
+                "Deleted Workflow",
+                null,
+                WorkflowStatus.DRAFT,
+                null,
+                null,
+                null,
+                LocalDateTime.now(),
+                UUID.randomUUID()
+        ));
+
+        List<Workflow> activeOwnerWorkflows = workflowRepository.findAllByOwnerIdAndDeletedAtIsNull(ownerId);
+
+        assertThat(activeOwnerWorkflows).hasSize(1);
+        assertThat(activeOwnerWorkflows.get(0).getName()).isEqualTo("Active Workflow");
     }
 
     @Test

@@ -11,6 +11,7 @@ import com.flow.auth.config.JwtConfiguration;
 import com.flow.auth.config.SecurityConfiguration;
 import com.flow.auth.dto.LoginResponse;
 import com.flow.auth.service.AuthenticationService;
+import com.flow.auth.service.RegistrationService;
 import com.flow.user.domain.model.UserRole;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,9 @@ class SecurityConfigurationIntegrationTest {
 
     @MockBean
     private AuthenticationService authenticationService;
+
+    @MockBean
+    private RegistrationService registrationService;
 
     @Test
     void shouldAllowPublicLoginEndpointWithoutToken() throws Exception {

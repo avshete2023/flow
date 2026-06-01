@@ -71,10 +71,34 @@ Effort: 1h
 DoD:
 
 *   users table migration created
+
+### Story AUTH-002
+
+Create User Repository
+
+Status: Implemented
+
+Complexity: S
+
+### Notes
+
+Implemented in `user-module` with repository integration tests.
     
 
 Feature: Registration
 ---------------------
+
+### Story AUTH-003
+
+Create Password Encoder Configuration
+
+Status: Implemented
+
+Complexity: S
+
+### Notes
+
+Implemented via `PasswordEncoderConfig` (BCrypt strength 12) with config test coverage.
 
 ### Story AUTH-004
 
@@ -117,6 +141,24 @@ Add service tests
 *   Validation works
     
 *   Tests pass
+
+### Story AUTH-005
+
+Registration API
+
+Status: Implemented
+
+Complexity: S
+
+### Technical Tasks
+
+#### TASK-AUTH-021
+
+Expose registration endpoint
+
+#### TASK-AUTH-022
+
+Add registration API tests
     
 
 Feature: Authentication
@@ -147,6 +189,29 @@ Create token validator
 #### TASK-AUTH-012
 
 Add JWT tests
+
+Story AUTH-007
+--------------
+
+Authentication Service
+
+Status: Implemented
+
+Complexity: M
+
+### Technical Tasks
+
+#### TASK-AUTH-023
+
+Authenticate by email and password hash
+
+#### TASK-AUTH-024
+
+Generate JWT access token and refresh token
+
+#### TASK-AUTH-025
+
+Add authentication service tests
 
 Story AUTH-008
 --------------
@@ -317,6 +382,25 @@ Create migration
 #### TASK-WF-008
 
 Add tests
+
+Story WF-003
+------------
+
+Workflow Repository Layer
+
+Status: Implemented
+
+Complexity: S
+
+### Tasks
+
+*   Workflow repository exists.
+    
+*   Workflow version repository exists.
+    
+*   Owner lookup supported.
+    
+*   Repository integration tests.
 
 Story WF-004
 ------------
@@ -492,6 +576,28 @@ Complexity: M
 *   Trigger persistence
     
 *   Tests
+    
+
+Story TRG-004
+-------------
+
+Scheduler Execution Service
+
+Status: Implemented
+
+Complexity: M
+
+### Tasks
+
+*   Detect eligible scheduler workflows.
+    
+*   Publish execution requests to RabbitMQ.
+    
+*   Prevent duplicate schedule firing.
+    
+*   Schedule firing tests.
+    
+*   Cron validation tests.
     
 
 Story TRG-005
@@ -691,6 +797,24 @@ Complexity: XS
 *   Context propagation
     
 *   Tests
+    
+
+Story CON-008
+-------------
+
+Connector Validation Service
+
+Status: Implemented
+
+Complexity: S
+
+### Tasks
+
+*   Connector-specific validation.
+    
+*   Validation result aggregation.
+    
+*   Service tests.
     
 
 EPIC-6 Workflow Execution Engine
@@ -1163,6 +1287,71 @@ Complexity: M
     
 *   Shared fixtures
     
+
+Story EXEC-002
+--------------
+
+Create Execution Step Entity
+
+Status: Implemented
+
+Complexity: M
+
+### Notes
+
+Implemented with JPA entity mapping node-level execution tracking.
+
+Story EXEC-003
+--------------
+
+Create Execution Repository Layer
+
+Status: Implemented
+
+Complexity: S
+
+### Notes
+
+Implemented with JPA repositories for WorkflowExecution and ExecutionStep.
+
+Story EXEC-005
+--------------
+
+Create Execution State Service
+
+Status: Implemented
+
+Complexity: M
+
+### Notes
+
+Implemented with state machine validation and audit event generation via ObjectProvider.
+
+Story EXEC-010
+--------------
+
+Create Workflow Graph Traversal Engine
+
+Status: Implemented
+
+Complexity: L
+
+### Notes
+
+Implemented with BFS traversal, cycle detection, and unreachable node validation.
+
+Story EXEC-016
+--------------
+
+Create Execution Event Logging
+
+Status: Implemented
+
+Complexity: S
+
+### Notes
+
+Implemented with structured logging for execution lifecycle events.
 
 Release Plan
 ============

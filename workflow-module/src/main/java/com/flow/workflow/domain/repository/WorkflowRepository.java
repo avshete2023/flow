@@ -13,6 +13,8 @@ public interface WorkflowRepository extends JpaRepository<Workflow, UUID> {
 
     List<Workflow> findAllByOwnerId(UUID ownerId);
 
+    List<Workflow> findAllByOwnerIdAndDeletedAtIsNull(UUID ownerId);
+
     List<Workflow> findAllByOwnerIdAndStatus(UUID ownerId, WorkflowStatus status);
 
     Optional<Workflow> findByIdAndOwnerIdAndDeletedAtIsNull(UUID id, UUID ownerId);

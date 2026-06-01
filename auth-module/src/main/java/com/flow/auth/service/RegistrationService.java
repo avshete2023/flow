@@ -2,6 +2,7 @@ package com.flow.auth.service;
 
 import com.flow.auth.dto.RegisterUserRequest;
 import com.flow.auth.dto.RegisterUserResponse;
+import com.flow.auth.exception.EmailAlreadyRegisteredException;
 import com.flow.auth.validator.RegistrationValidator;
 import com.flow.user.domain.entity.User;
 import com.flow.user.domain.model.UserRole;
@@ -42,7 +43,7 @@ public class RegistrationService {
         registrationValidator.validatePasswordStrength(request.password());
 
         if (userAccountPersistenceService.existsByEmail(request.email())) {
-            throw new IllegalStateException("Email already registered");
+            throw new EmailAlreadyRegisteredException();
         }
 
         String encodedPassword = passwordEncoder.encode(request.password());

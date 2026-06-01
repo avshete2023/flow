@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.flow.auth.dto.RegisterUserRequest;
 import com.flow.auth.dto.RegisterUserResponse;
+import com.flow.auth.exception.EmailAlreadyRegisteredException;
 import com.flow.auth.validator.RegistrationValidator;
 import com.flow.user.domain.entity.User;
 import com.flow.user.domain.model.UserRole;
@@ -119,7 +120,10 @@ class RegistrationServiceTest {
 
         when(userAccountPersistenceService.existsByEmail("duplicate@example.com")).thenReturn(true);
 
-        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> registrationService.register(request));
+        EmailAlreadyRegisteredException exception = assertThrows(
+                EmailAlreadyRegisteredException.class,
+                () -> registrationService.register(request)
+        );
 
         assertThat(exception.getMessage()).isEqualTo("Email already registered");
         verify(userAccountPersistenceService, never()).save(any(User.class));
